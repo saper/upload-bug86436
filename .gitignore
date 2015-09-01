@@ -3,3 +3,6 @@ ca_user
 ca_token
 ca_userid
 token
+watchtoken
+http.log.*
+*.ogv

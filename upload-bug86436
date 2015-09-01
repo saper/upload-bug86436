@@ -41,5 +41,5 @@ get 02  \
     -F text=Sometext \
     -F "filename=TestingNasenlaenge.ogv" \
     -F "token=<token" \
-    -F "file=@${FILE};type=video/ogg" \
+    -F "url=http://tools.wikimedia.pl/~saper/Um_eine_Nasenlaenge_1949_Hans_Moser.ogv" \
     "${SITE}"

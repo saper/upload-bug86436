@@ -20,20 +20,26 @@ FILE=Um_eine_Nasenlaenge_1949_Hans_Moser.ogv
 
 get() {
     tracelog="http.log.$1" ; shift
-    curl --trace ${tracelog} \
+    curl --trace-ascii ${tracelog} \
         -A "User:`cat ca_user` testing for https://phabricator.wikimedia.org/maniphest/task/edit/86436/" \
         --cacert GlobalSign.pem \
-        -b "Cookie: test2wikiUserName=`cat ca_user`;test2wikiUserID=`cat ca_userid`;centralauth_User=`cat ca_user`;centralauth_Token=`cat ca_token`"  \
+        -b "test2wikiUserName=`cat ca_user`; test2wikiUserID=`cat ca_userid`; centralauth_User=`cat ca_user`; centralauth_Token=`cat ca_token`"  \
+        -c cookie \
         "$@"
 } 
 
-get 01 "${SITE}?action=query&format=json&meta=tokens&type=csrf" | sed 's/^.*"csrftoken":"//;s/".*$//' > token
+get 01 "${SITE}?action=query&format=xml&meta=tokens&type=csrf" | sed -n 's/^.* csrftoken="//;s/".*$//;p' | tr -d '\n' > token
+# JSON: sed -n 's/^.*"csrftoken":"//;s/".*$//;s/\\\\/\\/;p' | tr -d '\n' > token
+echo -n token=`cat token | sed 's/\+/%2b/;s/\\\\/%5c/'` > tokenlong
 # {"batchcomplete":"","query":{"tokens":{"csrftoken":"81bf356f1c123fb9888eb76e5d3e6cf955e4f237+\\"}}}
 cat token
+echo
 get 02  \
+    -b cookie \
     -F action=upload \
     -F format=json \
-    -F filename=TestingNasenlaenge.ogv \
-    -F token=`cat token` \
-    -F file=@${FILE} \
-    ${SITE}
+    -F text=Sometext \
+    -F "filename=TestingNasenlaenge.ogv" \
+    -F "token=<token" \
+    -F "file=@${FILE};type=video/ogg" \
+    "${SITE}"

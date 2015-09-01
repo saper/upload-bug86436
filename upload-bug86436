@@ -14,16 +14,17 @@
 
 # https://commons.wikimedia.org/w/api.php?action=upload&filename=Old_and_New_London%2C_vol._1.djvu&format=json
 
-SITE=https://test2.wikipedia.org/w/api.php
+SITE=https://commons.wikimedia.org/w/api.php
 # https://archive.org/download/HansMoserUmEineNasenlaenge
 FILE=Um_eine_Nasenlaenge_1949_Hans_Moser.ogv
+PROJPREFIX=commonswiki
 
 get() {
     tracelog="http.log.$1" ; shift
     curl --trace-ascii ${tracelog} \
         -A "User:`cat ca_user` testing for https://phabricator.wikimedia.org/maniphest/task/edit/86436/" \
         --cacert GlobalSign.pem \
-        -b "test2wikiUserName=`cat ca_user`; test2wikiUserID=`cat ca_userid`; centralauth_User=`cat ca_user`; centralauth_Token=`cat ca_token`"  \
+        -b "${PROJPREFIX}UserName=`cat ca_user`; ${PROJPREFIX}UserID=`cat ca_userid`; centralauth_User=`cat ca_user`; centralauth_Token=`cat ca_token`"  \
         -c cookie \
         "$@"
 } 

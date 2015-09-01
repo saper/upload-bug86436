@@ -1,0 +1,34 @@
+.Dd September 1, 2015
+.Dt upload-bug86436 1
+.Os
+.
+.Sh NAME
+.Nm upload-bug86436
+.Nd Test for 100MB limitation for uploading to Wikimedia ervers.
+.
+.Sh SYNOPSIS
+.Nm
+.
+.Sh DESCRIPTION
+This is a small script to reproduce Wikimedia bug T86436:
+.Dl https://phabricator.wikimedia.org/T86436
+.Pp
+You need to login to the wiki and create files containing authentication tokens.
+You will also need a large file to be uploaded.
+.Sh FILES
+.Bl -tag -wdith ca_userid
+.It Pa ca_token
+Input file containing user's auth token from centralauth.
+.It Pa ca_user
+Input file containing user's centralauth username (the script assumes the local name is the same).
+.It Pa ca_userid
+Input file containing user's local numeric ID from the wiki you are connecting to.
+.
+.
+.It Pa http.log.01
+Output file with a complete trace of the HTTP transaction to fetch CSRF token.
+.It Pa http.log.02
+Output file with a complete trace of the HTTP transaction of the actual upload.
+.
+.Sh AUTHOR
+Marcin Cieslak <saper@saper.info>
